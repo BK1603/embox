@@ -12,6 +12,26 @@ diff -aur SDK_10.0.10.118/sdk/bsp/system/sys_man/sys_watchdog.c ../build/extbld/
  #include "osal.h"
  
  /* mutex to synchronize access to wdog data */
+diff -aur SDK_10.0.10.118/sdk/bsp/system/sys_man/include/sys_clock_mgr.h ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/bsp/system/sys_man/include/sys_clock_mgr.h
+--- SDK_10.0.10.118/sdk/bsp/system/sys_man/include/sys_clock_mgr.h	2020-07-07 07:08:18.000000000 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/bsp/system/sys_man/include/sys_clock_mgr.h	2020-08-28 12:38:07.721338883 +0300
+@@ -254,6 +254,8 @@
+  */
+ void cm_rcx_trigger_calibration(void);
+ #endif
++#endif /* OS_FREERTOS */
++
+ /**
+  * \brief Initialize the Low Power clock.
+  *
+@@ -298,7 +300,6 @@
+  */
+ __RETAINED_CODE void cm_lp_clk_wakeup(void);
+ 
+-#endif /* OS_FREERTOS */
+ 
+ /**
+  * \brief Block until the PLL is locked. If the PLL is locked then the function exits
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2019-12-20 11:51:02.000000000 +0300
 +++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-05-21 16:00:33.693168168 +0300
@@ -131,6 +151,17 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbl
  {
          OS_TASK_NOTIFY_FROM_ISR(adapter_if.task, mainBIT_BLE_CMAC_IRQ, OS_NOTIFY_SET_BITS);
  }
+ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/api/include/ble_l2cap.h ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/api/include/ble_l2cap.h
+--- SDK_10.0.10.118/sdk/interfaces/ble/api/include/ble_l2cap.h	2020-07-07 07:08:18.000000000 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/api/include/ble_l2cap.h	2020-08-28 12:38:07.721338883 +0300
+@@ -21,6 +21,7 @@
+ #define BLE_L2CAP_H_
+ 
+ #include <stdint.h>
++#include <sdk_defs.h>
+ #include "ble_common.h"
+ #include "ble_gap.h"
+ 
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/api/src/ble_gap.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/api/src/ble_gap.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/api/src/ble_gap.c	2019-12-20 11:51:02.000000000 +0300
 +++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/api/src/ble_gap.c	2020-05-21 14:35:29.527238237 +0300
@@ -251,27 +282,6 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_ad_msg.c ../bui
  #include "ble_stack_config.h"
  #include "ble_common.h"
  #include "ble_mgr_helper.h"
-diff -aur SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gap.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gap.c
---- SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gap.c	2019-12-20 11:51:02.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gap.c	2020-05-21 14:35:29.528238233 +0300
-@@ -147,7 +147,7 @@
- }
- 
- /** \brief Translate Dialog API role to GTL API role */
--static uint8_t dlg_role_to_gtl_role(gap_role_t dlg_role)
-+uint8_t dlg_role_to_gtl_role(gap_role_t dlg_role)
- {
-         gap_role_t gtl_role = GAP_ROLE_NONE;
- 
-@@ -176,7 +176,7 @@
- }
- 
- /** \brief Create GTL system configuration command using current ble_dev_params */
--static ble_mgr_common_stack_msg_t *ble_gap_dev_params_to_gtl(ble_dev_params_t *ble_dev_params)
-+ble_mgr_common_stack_msg_t *ble_gap_dev_params_to_gtl(ble_dev_params_t *ble_dev_params)
- {
-         ble_mgr_common_stack_msg_t *gmsg;
-         struct gapm_set_dev_config_cmd *gcmd;
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gtl.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gtl.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gtl.c	2019-12-20 11:51:02.000000000 +0300
 +++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/manager/src/ble_mgr_gtl.c	2020-05-21 14:35:29.529238228 +0300
