@@ -1,6 +1,6 @@
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c
---- SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2019-12-20 11:51:02.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-05-21 16:00:33.693168168 +0300
+--- SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-07-07 07:08:18.000000000 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-09-01 17:20:40.780190239 +0300
 @@ -19,8 +19,8 @@
  #include "ble_config.h"
  
@@ -84,42 +84,9 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbl
                                          /* Call BLE stack I/O TX done callback right away. */
                                          callback(BLE_STACK_IO_OK);
                                  } else {
-@@ -1049,9 +1050,9 @@
-         return ble_parameters;
- }
- #if (dg_configPMU_ADAPTER == 1)
--ADAPTER_INIT_DEP2(ad_ble_adapter, ad_ble_init, ad_pmu_adapter, ad_nvparam_adapter);
-+//ADAPTER_INIT_DEP2(ad_ble_adapter, ad_ble_init, ad_pmu_adapter, ad_nvparam_adapter);
- #else
--ADAPTER_INIT_DEP1(ad_ble_adapter, ad_ble_init, ad_nvparam_adapter);
-+//ADAPTER_INIT_DEP1(ad_ble_adapter, ad_ble_init, ad_nvparam_adapter);
- #endif /* dg_configPMU_ADAPTER */
- 
- #elif (dg_configNVMS_ADAPTER == 1)
-@@ -1065,9 +1066,9 @@
- #else
- 
- #if (dg_configPMU_ADAPTER == 1)
--ADAPTER_INIT_DEP1(ad_ble_adapter, ad_ble_init, ad_pmu_adapter);
-+//ADAPTER_INIT_DEP1(ad_ble_adapter, ad_ble_init, ad_pmu_adapter);
- #else
--ADAPTER_INIT(ad_ble_adapter, ad_ble_init);
-+//ADAPTER_INIT(ad_ble_adapter, ad_ble_init);
- #endif /* dg_configPMU_ADAPTER */
- 
- #endif /* dg_configNVPARAM_ADAPTER */
-@@ -1079,7 +1080,7 @@
- }
- #endif /* CONFIG_USE_BLE */
- 
--void cmac2sys_notify()
-+__attribute__((weak)) void cmac2sys_notify()
- {
-         OS_TASK_NOTIFY_FROM_ISR(adapter_if.task, mainBIT_BLE_CMAC_IRQ, OS_NOTIFY_SET_BITS);
- }
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-07-07 07:08:18.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-09-01 16:22:14.478929902 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-09-01 16:34:00.114253801 +0300
 @@ -52,7 +52,7 @@
  void lib_ble_stack_reset(uint8_t reset_type);
  bool cmac_cpu_wakeup(void);
