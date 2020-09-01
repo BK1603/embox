@@ -1,6 +1,6 @@
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-07-07 07:08:18.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-09-01 17:20:40.780190239 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-09-01 17:57:59.804577323 +0300
 @@ -19,8 +19,8 @@
  #include "ble_config.h"
  
@@ -47,21 +47,6 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbl
                                  /* Get message from the command queue. */
                                  OS_QUEUE_GET(adapter_if.cmd_q, &received_msg, 0);
                                  /* Make sure a valid op code is received */
-@@ -607,10 +608,10 @@
-                                         OS_FREE(received_msg);
-                                 }
-                         }
--                        else if ( (USE_BLE_SLEEP == 1) && (cm_lp_clk_is_avail()) && (!stay_active) ) {
--                                /* Sleep is possible only when the LP clock is ready! */
--                                ret = sleep_when_possible();
--                        }
-+                        //else if ( (USE_BLE_SLEEP == 1) && (cm_lp_clk_is_avail()) && (!stay_active) ) {
-+                        //        /* Sleep is possible only when the LP clock is ready! */
-+                        //        ret = sleep_when_possible();
-+                        //}
-                         else if (ble_block()) {
-                                 /* There are no pending BLE actions, so exit the while () loop. */
-                                 ret = -1;
 @@ -810,9 +811,9 @@
                          ble_stack_initialized = true;
  
