@@ -118,46 +118,18 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbl
          OS_TASK_NOTIFY_FROM_ISR(adapter_if.task, mainBIT_BLE_CMAC_IRQ, OS_NOTIFY_SET_BITS);
  }
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c
---- SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2019-12-20 11:51:02.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-05-21 15:53:14.276708040 +0300
-@@ -52,8 +52,8 @@
+--- SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-07-07 07:08:18.000000000 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-09-01 16:22:14.478929902 +0300
+@@ -52,7 +52,7 @@
  void lib_ble_stack_reset(uint8_t reset_type);
  bool cmac_cpu_wakeup(void);
  
 -void timer_init(void);
--void ble_timer_callback(void* varg);
-+//void timer_init(void);
-+//void ble_timer_callback(void* varg);
++static void ble_timer_init(void);
+ void ble_timer_callback(void* varg);
  
  bool ke_sleep_check(void);
- 
-@@ -64,7 +64,7 @@
- #define KE_GROSSTIMER_MASK      ((uint32_t)0x007FFFFF)
- #define ODD_TO_NEXT_EVEN(x)     ((x) & 0x01 ? x+1 : x)
- 
--__RETAINED OS_TIMER ble_timer;
-+//__RETAINED OS_TIMER ble_timer;
- __RETAINED uint8_t cmac_system_tcs_length;
- __RETAINED uint8_t cmac_synth_tcs_length;
- __RETAINED uint8_t cmac_rfcu_tcs_length;
-@@ -260,6 +260,7 @@
-                 power_ctrl_reg_values.onsleep_value;
- 
-         GLOBAL_INT_RESTORE();
-+#if 0
- 
-         /*
-          * Check NVPARAM for valid configuration values and write to proper CMAC configuration table
-@@ -310,7 +311,7 @@
-                 cmac_dynamic_config_table_ptr->sleep_enable = (bool) sleep_nvparam;
-                 ad_ble_stay_active(!sleep_nvparam);
-         }
--
-+#endif
- }
- 
- /**
-@@ -322,6 +323,7 @@
+@@ -330,6 +330,7 @@
   *       CMAC parameters.
   ****************************************************************************************
   */
@@ -165,86 +137,31 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c ../bu
  void ble_stack_init(void)
  {
          /* Make sure that LP clock is enabled */
-@@ -345,7 +347,9 @@
+@@ -353,7 +354,9 @@
          }
  
          /* Initialize BLE timer */
 -        timer_init();
-+        //timer_init();
++        ble_timer_init();
 +
-+		os_arch_main_init();
++	os_arch_main_init();
  
          /* Initialize BLE stack (Controller and Host) */
          lib_ble_stack_init();
-@@ -468,6 +472,7 @@
-         return result;
- }
- 
-+#if 0
+@@ -479,7 +482,7 @@
  /*
   * @brief Initialize BLE timer
   */
-@@ -476,6 +481,7 @@
+-void timer_init(void)
++static void ble_timer_init(void)
+ {
          ble_timer = OS_TIMER_CREATE("ble_tmr", 100 /* Dummy */, 0, 0, ble_timer_callback);
          OS_ASSERT(ble_timer);
- }
-+#endif
- 
- /*
-  * @brief Retrieve current time.
-@@ -484,11 +490,14 @@
-  */
- uint32_t timer_get_time(void)
- {
-+#if 0
-         uint32_t current_time_10ms;
- 
-         current_time_10ms = (OS_TICKS_2_MS(OS_GET_TICK_COUNT()) / 10) & KE_GROSSTIMER_MASK;
- 
-         return current_time_10ms;
-+#endif
-+	return 0;
- }
- 
- /*
-@@ -498,6 +507,7 @@
-  */
- void timer_set_timeout(uint32_t to)
- {
-+#if 0
-         OS_BASE_TYPE ret;
-         uint32_t current_time_10ms, timeout_10ms;
- 
-@@ -518,6 +528,7 @@
-         }
- 
-         OS_ASSERT(ret == OS_TIMER_SUCCESS);
-+#endif
- }
- 
- /*
-@@ -525,6 +536,7 @@
-  */
- void timer_enable(bool enable)
- {
-+#if 0
-         OS_BASE_TYPE ret;
- 
-         OS_ASSERT(ble_timer);
-@@ -544,6 +556,7 @@
-         }
- 
-         OS_ASSERT(ret == OS_TIMER_SUCCESS);
-+#endif
- }
- 
- void sys_temp_meas_enable(void)
-@@ -560,4 +573,8 @@
+@@ -568,4 +571,7 @@
  #endif
  }
  
 +void crypto_init(void) {
-+
 +}
 +
  #endif /* CONFIG_USE_BLE */
