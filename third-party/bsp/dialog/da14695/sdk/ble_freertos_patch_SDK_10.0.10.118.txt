@@ -1,6 +1,6 @@
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-07-07 07:08:18.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-08-28 12:38:07.721338883 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c	2020-09-01 14:34:56.069235253 +0300
 @@ -19,8 +19,8 @@
  #include "ble_config.h"
  
@@ -58,7 +58,7 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/adapter/src/ad_ble.c ../build/extbl
                                  } else {
 diff -aur SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c
 --- SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-07-07 07:08:18.000000000 +0300
-+++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-08-28 12:42:45.823065560 +0300
++++ ../build/extbld/third_party/bsp/dialog/da14695/sdk/SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c	2020-09-01 16:22:14.478929902 +0300
 @@ -52,7 +52,7 @@
  void lib_ble_stack_reset(uint8_t reset_type);
  bool cmac_cpu_wakeup(void);
@@ -68,16 +68,26 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c ../bu
  void ble_timer_callback(void* varg);
  
  bool ke_sleep_check(void);
-@@ -353,7 +353,7 @@
+@@ -330,6 +330,7 @@
+  *       CMAC parameters.
+  ****************************************************************************************
+  */
++extern int os_arch_main_init(void);
+ void ble_stack_init(void)
+ {
+         /* Make sure that LP clock is enabled */
+@@ -353,7 +354,9 @@
          }
  
          /* Initialize BLE timer */
 -        timer_init();
 +        ble_timer_init();
++
++	os_arch_main_init();
  
          /* Initialize BLE stack (Controller and Host) */
          lib_ble_stack_init();
-@@ -479,7 +479,7 @@
+@@ -479,7 +482,7 @@
  /*
   * @brief Initialize BLE timer
   */
@@ -86,7 +96,7 @@ diff -aur SDK_10.0.10.118/sdk/interfaces/ble/stack/da14690/src/arch_main.c ../bu
  {
          ble_timer = OS_TIMER_CREATE("ble_tmr", 100 /* Dummy */, 0, 0, ble_timer_callback);
          OS_ASSERT(ble_timer);
-@@ -568,4 +568,7 @@
+@@ -568,4 +571,7 @@
  #endif
  }
  
