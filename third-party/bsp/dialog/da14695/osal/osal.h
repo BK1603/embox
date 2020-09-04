@@ -170,6 +170,16 @@ extern int os_timer_change_period(struct sys_timer * t, int period );
 #define OS_TICKS_2_MS(ticks) \
 		jiffies2ms(ticks)
 
+/**
+ * \brief Convert from ms to OS ticks
+ *
+ * \param [in] ms milliseconds to convert
+ *
+ * \return value in OS ticks
+ *
+ */
+#define OS_MS_2_TICKS(ms) ms2jiffies(ms)
+
 #define OS_TIME_TO_TICKS(ms) \
 		ms2jiffies(ms)
 
@@ -190,11 +200,25 @@ extern int os_timer_change_period(struct sys_timer * t, int period );
 
 
 /**** Events ************/
-#define OS_EVENT_GROUP_SET_BITS_FROM_ISR(event_group, bits_to_set)     (0)
+
+#define OS_EVENT_GROUP_CREATE() NULL
+
+#define OS_EVENT_GROUP_WAIT_BITS(event_group, bits_to_wait, clear_on_exit, wait_for_all, timeout)
+
+
+#define OS_EVENT_GROUP_SET_BITS(event_group, bits_to_set)
+
+
+#define OS_EVENT_GROUP_SET_BITS_FROM_ISR(event_group, bits_to_set) \
+				OS_FAIL
+
+#define OS_EVENT_GROUP_CLEAR_BITS(event_group, bits_to_clear)
 
 #define OS_EVENT_GROUP_CLEAR_BITS_FROM_ISR(event_group, bits_to_clear)
 
-//#define configMINIMAL_STACK_SIZE      256 /* sys_usb_da1469x.c */
+#define OS_EVENT_GROUP_GET_BITS(event_group) 0
+
+#define OS_EVENT_GROUP_GET_BITS_FROM_ISR(event_group) 0
 
 /*************************** TODO PWR DEPS ****************************/
 
