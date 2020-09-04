@@ -107,6 +107,8 @@ extern int os_mutex_create(struct mutex **m_p);
 #define OS_LEAVE_CRITICAL_SECTION() \
 	irq_unlock()
 
+#define OS_LEAVE_CRITICAL_SECTION_FROM_ISR(a)
+
 /**** Queue *****/
 
 #define OS_QUEUE_CREATE(queue, item_size, max_items) \
@@ -228,11 +230,23 @@ static inline OS_MUTEX xSemaphoreCreateMutex(void) {
 	return NULL;
 }
 
-#define OS_EVENT_WAIT(mutex, timeout)
+#define OS_EVENT void *
+
+#define OS_EVENT_SIGNALED  1
+
+static inline int evt_wait(void) {
+	return 0;
+}
+
+#define OS_EVENT_WAIT(mutex, timeout)  evt_wait()
 
 #define OS_EVENT_FOREVER   (-1u)
 
 #define OS_EVENT_SIGNAL(mutex)
+
+#define OS_EVENT_CREATE(event)
+#define OS_ENTER_CRITICAL_SECTION_FROM_ISR(event)
+#define OS_EVENT_SIGNAL_FROM_ISR(event)
 
 #define configPOST_SLEEP_PROCESSING()
 #define configPRE_STOP_PROCESSING()
