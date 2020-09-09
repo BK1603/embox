@@ -67,7 +67,7 @@ void arch_init(void) {
 
 	/* Default value is 512Kb. I will be changed only after software reset. */
 	if (hw_cache_flash_get_region_size() == HW_CACHE_FLASH_REGION_SZ_512KB) {
-		hw_cache_flash_set_region_size(HW_CACHE_FLASH_REGION_SZ_1MB);
+		hw_cache_flash_set_region_size(HW_CACHE_FLASH_REGION_SZ_2MB);
 		NVIC_SystemReset();
 	}
 
