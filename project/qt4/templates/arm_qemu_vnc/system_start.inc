@@ -3,4 +3,7 @@
 "netmanager",
 "service telnetd",
 "service httpd",
+"export QT_QPA_FONTDIR=/fonts",
+"service moveblocks -platform vnc",
+//"sevice animatedtiles -platform vnc",
 "tish",
